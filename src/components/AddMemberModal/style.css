@@ -1,0 +1,105 @@
+.backdrop_overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(75, 74, 74, 0.8);
+}
+
+.modal_container{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 75%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 5px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.close_btn{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close_btn button{
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+  padding: 5px;
+}
+
+.modal_container_content .non_scrollable_content{
+  margin: 20px 0px;
+  padding: 0px 20px;
+}
+
+.modal_container_content{
+  height: calc(78% - 50px);
+}
+
+.modal_container_content .scrollable_content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  height: calc(90% - 30px);
+  overflow: auto;
+  padding: 20px;
+  padding-top: 0px;
+}
+
+.scrollable_content .inp_container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inp_container input{
+  outline: none;
+  height: 2.2rem;
+  padding: 0px 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+.form_buttons_container{
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 15px;
+}
+
+.form_buttons_container button{
+  border-radius: 15px;
+  padding: 8px 24px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+.cancel_btn{
+  background-color: white;
+  color: rgb(79, 79, 255);
+  border: 1px solid rgb(79, 79, 255);
+}
+
+.save_btn{
+  border: none;
+  background-color: rgb(79, 79, 255);
+  color: white;
+}
+

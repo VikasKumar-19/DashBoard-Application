@@ -1,0 +1,22 @@
+.dashBoard_header{
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+}
+
+.div_line{
+  height: 5px;
+  background-color: rgb(172, 172, 172);
+}
+
+.dashBoard_header .add_member_btn{
+  background-color: rgb(78, 78, 255);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+.table_heading{
+  font-family: Arial, Helvetica, sans-serif;
+}
