@@ -1,65 +1,140 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./style.css"
 import collapseIcon from "../../assets/collapse_icon.png";
 import expandIcon from "../../assets/expand_icon.png";
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 const Table = () => {
+
+  const [isCompanyOptionsActive, setIsCompanyOptionsActive] = useState(false);
+  const [isStatusOptionsActive, setIsStatusOptionsActive] = useState(false);
+  const [statusOptions, setStatusOptions] = useState({active: true, closed: true});
+  const [companyOptions, setCompanyOptions] = useState({selectAll: true});
+  const [membersData, setMembersData] = useState([]);
+  const [companiesData, setCompaniesData] = useState([]);
+  const [selectedCompanies, setSelectedCompanies] = useState(0);
+
+  useEffect(()=>{
+    const unsub = onSnapshot(collection(db, "membersData"), (snapshot)=>{
+      let membersData=[];
+      let companiesData=[];
+      snapshot.docs.forEach((memberInfo)=>{
+        membersData.push(memberInfo.data());
+        companiesData.push(memberInfo.data().company)
+      });
+      setMembersData(membersData);
+      companiesData = [...new Set(companiesData)];
+      let companiesObj = {};
+      companiesData.forEach((company)=>{
+        companiesObj = {...companiesObj, [company]: true}
+      })
+      setSelectedCompanies(companiesData.length);
+      setCompaniesData(companiesData);
+      setCompanyOptions({...companyOptions, ...companiesObj});
+    })
+
+    return ()=>{
+      unsub();
+    }
+  },[])
+
+  useEffect(() => {
+    function closeOptions(){
+      setIsCompanyOptionsActive(false);
+      setIsStatusOptionsActive(false);
+    }
+  
+    document.addEventListener("click", closeOptions);
+
+    return () => {
+      document.removeEventListener("click", closeOptions);
+    }
+  }, [])
+  
+
+  function handleToggleOptions(filterName){
+    if(filterName === "company"){
+      setIsCompanyOptionsActive((state)=>{
+        return !state;
+      })
+    }
+    if(filterName === 'status'){
+      setIsStatusOptionsActive((state)=>{
+        return !state;
+      })
+    }
+  }
+
+  function handleStatusOptionChange(e){
+    if(e.target.id === "active"){
+      if(statusOptions.active)
+        setStatusOptions({...statusOptions, active: false});
+      else
+        setStatusOptions({...statusOptions, active: true});
+    }
+    else if(e.target.id === "closed"){
+      if(statusOptions.closed)
+      setStatusOptions({...statusOptions, closed: false});
+      else
+      setStatusOptions({...statusOptions, closed: true});
+    }
+  }
 
 
   return (
     <>
 
     <div className='filters_container'>
-      <div className='company_filter_container'>
+      <div onClick={(e)=>{
+        e.stopPropagation();
+        handleToggleOptions("company");
+      }} 
+      className='company_filter_container'>
         <div className='company_filter'>
-          Company({"3"})
-          <img style={{width: "20px", height: "20px"}} src={expandIcon} />
+          Company({selectedCompanies})
+          <img style={{width: "20px", height: "20px"}} src={isCompanyOptionsActive?collapseIcon:expandIcon} alt="icon" />
         </div>
+        {
+          isCompanyOptionsActive && 
+          <div onClick={(e)=>{e.stopPropagation()}} className='company_options_box'>
+            <div className="option_item">
+              <input checked={companyOptions.selectAll} type="checkbox" id="selectAll" value="Select all" />
+              <label htmlFor="selectAll">Select all</label>
+            </div>
+            {companiesData.map((companyName)=>{
+              return <div className="option_item">
+              <input checked={companyOptions[companyName]} type="checkbox" id="selectAll" value="Select all" />
+              <label htmlFor="selectAll">{companyName}</label>
+            </div>
+            })}
 
-        <div className='company_options_box'>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
           </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-        </div>
+        }
       </div>
 
-      <div className='status_filter_container'>
+      <div onClick={(e)=>{ 
+        e.stopPropagation();
+        handleToggleOptions("status");
+      }} 
+      className='status_filter_container'>
         <div className='status_filter'>
           Status
-          <img style={{width: "20px", height: "20px"}} src={expandIcon} />
+          <img style={{width: "20px", height: "20px"}} src={isStatusOptionsActive?collapseIcon:expandIcon} alt="icon" />
         </div>
-
-        <div className='status_options_box'>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
+        {
+          isStatusOptionsActive && 
+          <div onClick={(e)=>{e.stopPropagation()}} className='status_options_box'>
+            <div className="option_item">
+              <input onChange={handleStatusOptionChange} checked={statusOptions.active} type="checkbox" id="active" value="active" />
+              <label htmlFor="active">Active</label>
+            </div>
+            <div className="option_item">
+              <input onChange={handleStatusOptionChange} checked={statusOptions.closed} type="checkbox" id="closed"  value="closed" />
+              <label htmlFor="closed">Closed</label>
+            </div>
           </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-          <div className="option_item">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-            <label htmlFor="vehicle1">Select all</label>
-          </div>
-        </div>
+        }
       </div>
     </div>
     

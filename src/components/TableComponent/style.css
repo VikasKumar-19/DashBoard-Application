@@ -2,6 +2,8 @@
   width: 85vw;
   margin: 0 auto;
   overflow-x: auto;
+  -webkit-box-shadow: 0px 0px 4px 3px #D3D3D3; 
+  box-shadow: 0px 0px 4px 3px #D3D3D3;
 }
 
 .main_table, .main_table tr, .main_table td{
@@ -31,6 +33,12 @@
 .non_data_elements{
   width: 4rem;
   min-width: 4rem;
+}
+
+.main_table input{
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
 }
 
 .main_table td{
