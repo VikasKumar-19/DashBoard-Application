@@ -21,7 +21,7 @@ const Table = () => {
       let companiesData=[];
       snapshot.docs.forEach((memberInfo)=>{
         membersData.push(memberInfo.data());
-        companiesData.push(memberInfo.data().company)
+        companiesData.push(memberInfo.data().companyName)
       });
       setMembersData(membersData);
       companiesData = [...new Set(companiesData)];
@@ -67,18 +67,60 @@ const Table = () => {
   }
 
   function handleStatusOptionChange(e){
-    if(e.target.id === "active"){
-      if(statusOptions.active)
-        setStatusOptions({...statusOptions, active: false});
-      else
-        setStatusOptions({...statusOptions, active: true});
+    setStatusOptions({...statusOptions, [e.target.id]: statusOptions[e.target.id]?false:true});
+  }
+
+  function handleCompanyOptionChange(e){
+    if(e.target.value === "selectAll"){
+      let stateObj = {...companyOptions};
+      if(companyOptions.selectAll){
+        for(let key in companyOptions){
+          stateObj = {...stateObj, [key]: false};
+        }
+        setSelectedCompanies(0);
+        setCompanyOptions({...stateObj});
+      }
+      else{
+        for(let key in companyOptions){
+          stateObj = {...stateObj, [key]: true};
+        }
+        setSelectedCompanies(companiesData.length);
+        setCompanyOptions({...stateObj});
+      }
     }
-    else if(e.target.id === "closed"){
-      if(statusOptions.closed)
-      setStatusOptions({...statusOptions, closed: false});
-      else
-      setStatusOptions({...statusOptions, closed: true});
+
+    else{
+      let stateObj = {...companyOptions, [e.target.value]: companyOptions[e.target.value]?false:true};
+      if(stateObj[e.target.value]){
+        setSelectedCompanies((prev)=>{
+          return prev + 1;
+        })
+      }
+      else{
+        setSelectedCompanies((prev)=>{
+          return prev - 1;
+        })
+      }
+
+      setCompanyOptions({...stateObj});
+      let isFlag = true;
+      for(let key in stateObj){
+        if(key !== "selectAll" && !stateObj[key]){
+          isFlag = false;
+          break;
+        }
+      }
+      if(isFlag){
+        stateObj = {...stateObj, selectAll: true}
+        setCompanyOptions({...stateObj});
+      }
+      else{
+        stateObj = {...stateObj, selectAll: false}
+        setCompanyOptions({...stateObj});
+      }
+
     }
+    
   }
 
 
@@ -99,14 +141,17 @@ const Table = () => {
           isCompanyOptionsActive && 
           <div onClick={(e)=>{e.stopPropagation()}} className='company_options_box'>
             <div className="option_item">
-              <input checked={companyOptions.selectAll} type="checkbox" id="selectAll" value="Select all" />
+              <input onChange={handleCompanyOptionChange} checked={companyOptions.selectAll} type="checkbox" id="selectAll" value="selectAll" />
               <label htmlFor="selectAll">Select all</label>
             </div>
             {companiesData.map((companyName)=>{
-              return <div className="option_item">
-              <input checked={companyOptions[companyName]} type="checkbox" id="selectAll" value="Select all" />
-              <label htmlFor="selectAll">{companyName}</label>
-            </div>
+              let companyId = companyName.split(" ").join("");
+              return(
+                <div className="option_item">
+                <input onChange={handleCompanyOptionChange} checked={companyOptions[companyName]} type="checkbox" id={companyId} value={companyName} />
+                <label htmlFor={companyId} >{companyName}</label>
+                </div>
+              )
             })}
 
           </div>
