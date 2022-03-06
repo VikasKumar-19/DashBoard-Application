@@ -42,7 +42,7 @@ const DashBoard = () => {
       <div className='dashBoard_header'>
         <div style={{display: "flex", gap: "20px"}}>
           <h1 className='table_heading'>Team Members</h1>
-          <button onClick={()=>{setIsModalActive(true)}} style={{display: "flex", alignItems: "center", gap: "5px", cursor: "pointer"}} className='add_member_btn'>Add Members<span style={{fontSize: "24px"}}>+</span></button>
+          <button onClick={()=>{setIsModalActive(true)}} style={{display: "flex", alignItems: "center", gap: "5px", cursor: "pointer", fontWeight: "bold"}} className='add_member_btn'>Add Members<span style={{fontSize: "24px"}}>+</span></button>
         </div>
         {
           !skipUser &&
