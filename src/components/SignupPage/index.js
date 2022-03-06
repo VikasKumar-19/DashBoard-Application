@@ -30,6 +30,7 @@ const SignupModule = () => {
             </div>
             <div style={{fontSize: "18px"}} className='login_option'>
                 Already have an account? <Link to={'/login'}><span style={{color: "blue"}}>Login</span></Link>
+                &nbsp; or <Link to={'/'}><span style={{color: "blue"}}>skip</span></Link> login
             </div>
         </div>
     </div>

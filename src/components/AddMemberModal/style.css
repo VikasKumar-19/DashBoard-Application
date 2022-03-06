@@ -74,6 +74,11 @@
   font-size: 15px;
 }
 
+.inp_container select{
+  height: 2.2rem;
+  outline: none;
+}
+
 .form_buttons_container{
   display: flex;
   justify-content: flex-end;

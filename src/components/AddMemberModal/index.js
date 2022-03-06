@@ -12,6 +12,7 @@ const AddMemberModal = ({closeModal}) => {
     notes: "",
   })
 
+  const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleMemberDetails(e){
@@ -29,12 +30,21 @@ const AddMemberModal = ({closeModal}) => {
   }
 
   async function saveMemberDetails(){
+
+    if(memberDetails.status === ""){
+      setShowError(true);
+      setTimeout(()=>{
+        setShowError(false);
+      }, 2000)
+      return;
+    }
+
     setIsLoading(true);
     try{
         await addDoc(collection(db, "membersData"), {
         memberName: memberDetails.memberName.trim(),
         companyName: memberDetails.companyName.trim(),
-        satus: memberDetails.status.trim(),
+        status: memberDetails.status.trim(),
         notes: memberDetails.notes.trim(),
         timestamp: serverTimestamp(),
       });
@@ -50,7 +60,7 @@ const AddMemberModal = ({closeModal}) => {
       status: "",
       notes: "",
     });
-
+    setShowError(false);
     closeModal();
   }
 
@@ -76,7 +86,12 @@ const AddMemberModal = ({closeModal}) => {
             </div>
             <div className='inp_container'>
               <label htmlFor='statusInp'>Status</label>
-              <input onChange={handleMemberDetails} value={memberDetails.status} id='statusInp' type="text" />
+              <select onChange={handleMemberDetails} value={memberDetails.status} id="statusInp">
+                <option value="">Select status</option>
+                <option value="active">Active</option>
+                <option value="closed">Closed</option>
+              </select>
+              <p style={{color: "red"}}>{showError && "Please Select status"}</p>
             </div>
             <div className='inp_container'>
               <label htmlFor='notesInp'>Notes</label>

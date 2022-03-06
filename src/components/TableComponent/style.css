@@ -4,6 +4,8 @@
   overflow-x: auto;
   -webkit-box-shadow: 0px 0px 4px 3px #D3D3D3; 
   box-shadow: 0px 0px 4px 3px #D3D3D3;
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 
 .main_table, .main_table tr, .main_table td{
@@ -68,10 +70,21 @@
   margin-right: 80px;
 }
 
+.buttons_container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 30px 0px;
+  width: 85vw;
+  margin: 0 auto;
+}
+
 .filters_container{
   display: flex;
-  gap: 40px;
-  padding: 30px 50px;
+  flex-wrap: wrap;
+  column-gap: 40px;
+  row-gap: 15px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
 }
@@ -106,6 +119,14 @@
   overflow: auto;
 }
 
+.company_options_box{
+  z-index: 20;
+}
+
+.status_options_box{
+  z-index: 15;
+}
+
 .option_item{
   display: flex;
   gap: 8px;
@@ -117,4 +138,20 @@
 
 .option_item *{
   cursor: pointer;
+}
+
+.deleteRecordBtn{
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 5px 15px;
+}
+
+.deleteRecordBtn:disabled{
+  background-color: rgb(231, 231, 231);
+  color: rgb(151, 151, 151);
+  border: none;
+  border: 1px solid rgb(142, 143, 143);
 }
